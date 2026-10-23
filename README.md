@@ -1,47 +1,126 @@
-# Proyecto Urban Grocers
+# Urban Grocers — API Test Automation
 
-## Descripción
+API testing project developed as part of the TripleTen QA Engineering program. It uses Python, pytest, and Requests to validate the `name` field when creating a product kit.
 
-Este proyecto contiene pruebas automatizadas para la API de Urban Grocers.
+## Project Objective
 
-El objetivo es comprobar el comportamiento del endpoint de creación de kits de productos, validando diferentes valores para el parámetro `name`.
+Check that the API accepts valid kit names and rejects values that do not meet the requirements.
 
-Las pruebas crean primero un nuevo usuario para obtener un `authToken` y posteriormente utilizan ese token para crear un kit.
+Each test creates a user, obtains an authentication token, and uses that token to send a kit-creation request.
 
-## Tecnologías utilizadas
+## Technologies
 
 - Python
-- Pytest
+- pytest
 - Requests
-- Git
-- GitHub
-- Visual Studio Code
+- HTTP and JSON
+- Bearer authentication
+- Git and GitHub
 
-## Archivos del proyecto
+## Test Coverage
 
-- `configuration.py`: contiene la URL del servidor y las rutas de los endpoints.
-- `data.py`: contiene los datos utilizados para crear usuarios y kits.
-- `sender_stand_request.py`: contiene las funciones para enviar solicitudes HTTP a la API.
-- `create_kit_name_kit_test.py`: contiene las pruebas automatizadas para validar el campo `name`.
-- `.gitignore`: evita subir archivos temporales o innecesarios al repositorio.
+| Scenario | Expected HTTP status |
+| --- | --- |
+| Name with 1 character | 201 |
+| Name with 511 characters | 201 |
+| Empty name | 400 |
+| Name with 512 characters | 400 |
+| Name containing special characters | 201 |
+| Name containing spaces | 201 |
+| Name containing numeric characters as a string | 201 |
+| Request without the `name` field | 400 |
+| Numeric value instead of a string | 400 |
 
-## Casos de prueba
+Positive tests also verify that the returned name matches the submitted value.
 
-Se implementaron 9 casos de prueba para el parámetro `name`:
+## My Contribution
 
-1. Nombre con 1 carácter.
-2. Nombre con 511 caracteres.
-3. Nombre con 0 caracteres.
-4. Nombre con 512 caracteres.
-5. Nombre con caracteres especiales.
-6. Nombre con espacios.
-7. Nombre con números.
-8. Solicitud sin el parámetro `name`.
-9. Parámetro `name` con un tipo de dato incorrecto (número).
+I implemented test data preparation, reusable request functions, authentication-token retrieval, and positive and negative assertions.
 
-## Instalación
+I organized the project into separate modules for configuration, data, HTTP requests, and tests. I also compared expected and actual responses to identify validation discrepancies.
 
-Clonar el repositorio:
+## Repository Structure
+
+- `configuration.py`: Server URL and endpoint paths.
+- `data.py`: User and kit request data.
+- `sender_stand_request.py`: Functions for sending HTTP requests.
+- `create_kit_name_kit_test.py`: Nine automated API test cases and assertion helpers.
+- `.gitignore`: Excludes temporary Python and pytest files.
+- `README.md`: Project overview and execution instructions.
+
+## Requirements
+
+- Python 3
+- An active TripleTen Urban Grocers training server
+- Internet access
+
+## Installation
+
+Clone the repository:
 
 ```bash
 git clone https://github.com/GGO88-German/qa-project-Urban-Grocers-app-es.git
+cd qa-project-Urban-Grocers-app-es
+```
+
+Install the dependencies:
+
+```bash
+python -m pip install pytest requests
+```
+
+## Configuration
+
+Start the Urban Grocers training server and update `URL_SERVICE` in `configuration.py` with its current base URL.
+
+Training-server URLs expire. A server connection error does not by itself indicate a product defect.
+
+## Running the Tests
+
+Run this command from the repository directory:
+
+```bash
+python -m pytest -v create_kit_name_kit_test.py
+```
+
+To save a JUnit XML report:
+
+```bash
+python -m pytest -v create_kit_name_kit_test.py --junitxml=results.xml
+```
+
+## Documented Findings
+
+A previously recorded execution produced five passing tests and four failing tests.
+
+The failing scenarios involved an empty name, an oversized name, a missing name, and a numeric value instead of a string.
+
+Examples of observed discrepancies:
+
+- An empty name returned 201 instead of the expected 400.
+- A name with 512 characters returned 201 instead of 400.
+- A request without `name` returned 500 instead of 400.
+
+These are historical observations from the training environment, not results from a new execution. Run the suite against an active server to obtain current results.
+
+Failed assertions should be investigated by comparing the requirements, request data, and actual response. Expected results should not be changed solely to make a test pass.
+
+## Skills Demonstrated
+
+- API test design
+- Boundary-value analysis
+- Positive and negative testing
+- Authentication handling
+- Reusable test helpers
+- HTTP status and response-body validation
+- Analysis of expected versus actual behavior
+
+## Author
+
+German Gonzalez Oregel
+
+LinkedIn: https://www.linkedin.com/in/german-gonzalez-oregel-729a0243/
+
+## Educational Context
+
+This project uses the Urban Grocers training application and starter materials provided by TripleTen.
